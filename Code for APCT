@@ -1,0 +1,47 @@
+import pandas as pd
+import datetime
+
+# Simulating compliance data
+data = {
+    'User ID': [1, 2, 3, 4, 5],
+    'Consent Given (GDPR)': ['Yes', 'No', 'Yes', 'Yes', 'No'],
+    'Data Retention Period (Days)': [30, 90, 30, 60, 120],
+    'Access Control Compliant (HIPAA)': ['Yes', 'No', 'Yes', 'No', 'Yes'],
+    'Data Rights Notification (CCPA)': ['Yes', 'No', 'Yes', 'Yes', 'No'],
+    'Last Update': [datetime.datetime(2023, 12, 1), datetime.datetime(2023, 11, 1), datetime.datetime(2023, 12, 5), datetime.datetime(2023, 10, 15), datetime.datetime(2023, 9, 30)]
+}
+
+# Creating DataFrame
+df = pd.DataFrame(data)
+
+# Calculate compliance gaps
+df['GDPR Compliance Gap'] = df['Consent Given (GDPR)'].apply(lambda x: 1 if x == 'No' else 0)
+df['HIPAA Compliance Gap'] = df['Access Control Compliant (HIPAA)'].apply(lambda x: 1 if x == 'No' else 0)
+df['CCPA Compliance Gap'] = df['Data Rights Notification (CCPA)'].apply(lambda x: 1 if x == 'No' else 0)
+
+# Defining the function for data retention check
+def check_data_retention(row):
+    retention_period = row['Data Retention Period (Days)']
+    days_since_last_update = (datetime.datetime.now() - row['Last Update']).days
+    if days_since_last_update > retention_period:
+        return 1  # Data retention gap
+    return 0
+
+df['Data Retention Gap'] = df.apply(check_data_retention, axis=1)
+
+# Overview of compliance gaps
+summary = {
+    'GDPR Compliance Gap': df['GDPR Compliance Gap'].sum(),
+    'HIPAA Compliance Gap': df['HIPAA Compliance Gap'].sum(),
+    'CCPA Compliance Gap': df['CCPA Compliance Gap'].sum(),
+    'Data Retention Gap': df['Data Retention Gap'].sum()
+}
+
+print("Compliance Gaps Summary:")
+for key, value in summary.items():
+    print(f"{key}: {value} gaps")
+
+# Can export data to a CSV for Power BI integration
+df.to_csv('compliance_gaps.csv', index=False)
+
+print("Compliance data exported to 'compliance_gaps.csv' for Power BI visualization.")
