@@ -1,11 +1,1 @@
-# Automated-Privacy-Compliance-Tracker
-
-Includes user consent (GDPR), data retention period, access control (HIPAA), and notification of data rights (CCPA).
-
-Checks whether the user's data adheres to necessary regulations (GDPR consent, HIPAA access controls, CCPA data rights).
-
-Calculates if the data retention period has been exceeded.
-
- Calculates the number of compliance gaps and prints them.
-
- Exports the compliance data to a CSV file that can be visualized in Power BI.
+The Python script automates the monitoring of privacy compliance for regulations such as GDPR, CCPA, and HIPAA. It tracks compliance gaps and generates a report summarizing potential issues such as missing user consent, data retention violations, and access control gaps. The script outputs the results in a CSV file that can be imported into Power BI for visualization and further analysis.
